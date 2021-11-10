@@ -46,10 +46,10 @@ type StateProps = {
 
   // Fees
   feeSyntax: string,
-  feeSyntaxStyle?: string,
+  feeSyntaxStyle?: string
 
   // Error
-  errorMessage?: string
+  // errorMessage?: string
 }
 
 type DispatchProps = {
@@ -110,17 +110,13 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
   }
 
   renderExchangeRates = () => {
-    const { primaryInfo, secondaryInfo, errorMessage = this.state.errorMessage, fiatPerCrypto, theme } = this.props
+    const { primaryInfo, secondaryInfo, fiatPerCrypto, theme } = this.props
     const styles = getStyles(theme)
+
     return (
       <View style={styles.exchangeRateContainer}>
-        {errorMessage != null ? (
-          <EdgeText numberOfLines={1} style={styles.exchangeRateErrorText}>
-            {errorMessage.split('\n')[0]}
-          </EdgeText>
-        ) : (
-          <ExchangeRate primaryInfo={primaryInfo} secondaryInfo={secondaryInfo} secondaryDisplayAmount={fiatPerCrypto} />
-        )}
+        <EdgeText style={styles.exchangeRateDescriptionText}>{s.strings.string_rate}</EdgeText>
+        <ExchangeRate primaryInfo={primaryInfo} secondaryInfo={secondaryInfo} secondaryDisplayAmount={fiatPerCrypto} />
       </View>
     )
   }
@@ -180,8 +176,8 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
       <ThemedModal bridge={this.props.bridge} onCancel={this.handleCloseModal} paddingRem={1.5}>
         {this.renderFlipInput()}
         {this.renderFees()}
-        {this.renderTitle()}
         {this.renderExchangeRates()}
+        {this.renderTitle()}
         {this.renderBalance()}
       </ThemedModal>
     )
@@ -202,10 +198,15 @@ const getStyles = cacheStyles((theme: Theme) => ({
     marginHorizontal: theme.rem(0.5)
   },
   exchangeRateContainer: {
-    margin: theme.rem(0.5)
+    flexDirection: 'row'
   },
   exchangeRateErrorText: {
     color: theme.dangerText
+  },
+  exchangeRateDescriptionText: {
+    flex: 1,
+    fontSize: theme.rem(0.75),
+    color: theme.secondaryText
   },
   balanceValue: {
     textAlign: 'right'
@@ -214,7 +215,9 @@ const getStyles = cacheStyles((theme: Theme) => ({
     flex: 1
   },
   feesContainer: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginTop: theme.rem(0.5),
+    marginBottom: theme.rem(1)
   },
   feesContainerText: {
     flex: 1,

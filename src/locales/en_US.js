@@ -368,6 +368,7 @@ const strings = {
   string_to_capitalize: 'To',
   string_show_balance: 'Show Balance',
   string_amount: 'Amount',
+  string_rate: 'Rate',
   exchange_rates_loading: 'Exchange Rates Loading...',
   exchange_rate_loading_singular: 'Exchange Rate Loading...',
   string_master_private_key: 'Master Private Key',
