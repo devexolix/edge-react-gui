@@ -20,6 +20,7 @@ import { type Theme, type ThemeProps, cacheStyles, withTheme } from '../services
 import { Card } from '../themed/Card'
 import { EdgeText } from '../themed/EdgeText.js'
 import { type ExchangedFlipInputAmounts, ExchangedFlipInput } from '../themed/ExchangedFlipInput'
+import { MiniButton } from '../themed/MiniButton.js'
 import { ModalTitle } from '../themed/ModalParts.js'
 import { ThemedModal } from '../themed/ThemedModal.js'
 
@@ -156,6 +157,7 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
           isFocus
           isFiatOnTop={bns.eq(overridePrimaryExchangeAmount, '0')}
         />
+        <MiniButton alignSelf="center" label={s.strings.string_max_cap} marginRem={[1.2, 0, 0]} onPress={this.handleSendMaxAmount} />
       </Card>
     )
   }
