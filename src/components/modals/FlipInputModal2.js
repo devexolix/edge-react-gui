@@ -177,23 +177,29 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
   }
 
   render() {
+    const styles = getStyles(this.props.theme)
     return (
       <ThemedModal bridge={this.props.bridge} onCancel={this.handleCloseModal} paddingRem={1.5}>
-        {this.renderFlipInput()}
-        <TouchableWithoutFeedback onPress={this.handleFeesChange}>
-          <View>
-            {this.renderFees()}
-            {this.renderExchangeRates()}
-            {this.renderBalance()}
-            {this.renderErrorMessge()}
-          </View>
-        </TouchableWithoutFeedback>
+        <View style={styles.container}>
+          {this.renderFlipInput()}
+          <TouchableWithoutFeedback onPress={this.handleFeesChange}>
+            <View>
+              {this.renderFees()}
+              {this.renderExchangeRates()}
+              {this.renderBalance()}
+              {this.renderErrorMessge()}
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
       </ThemedModal>
     )
   }
 }
 
 const getStyles = cacheStyles((theme: Theme) => ({
+  container: {
+    flex: 1
+  },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
