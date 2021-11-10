@@ -63,7 +63,7 @@ class ExchangeRateComponent extends React.Component<Props & ThemeProps> {
       return <EdgeText style={style}>{s.strings.drawer_exchange_rate_loading}</EdgeText>
     }
 
-    const exchangeRate = `${formattedPrimaryAmount} ${primaryDisplayName} = ${secondaryDisplaySymbol} ${formattedSecondaryAmount} ${secondaryCurrencyCode}`
+    const exchangeRate = `${formattedPrimaryAmount} ${primaryDisplayName} = ${formattedSecondaryAmount} ${secondaryCurrencyCode}`
     return <EdgeText style={style}>{exchangeRate}</EdgeText>
   }
 }
