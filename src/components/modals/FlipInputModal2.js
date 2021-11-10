@@ -137,29 +137,26 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
   }
 
   renderFlipInput = () => {
-    const { flipInputHeaderText, flipInputHeaderLogo, primaryInfo, secondaryInfo, fiatPerCrypto, theme } = this.props
+    const { flipInputHeaderText, flipInputHeaderLogo, primaryInfo, secondaryInfo, fiatPerCrypto } = this.props
     const { overridePrimaryExchangeAmount } = this.state
-    const styles = getStyles(theme)
     return (
-      <View style={styles.flipInputContainer}>
-        <Card marginRem={[0, 0.75]}>
-          <ExchangedFlipInput
-            headerText={flipInputHeaderText}
-            headerLogo={flipInputHeaderLogo}
-            primaryCurrencyInfo={{ ...primaryInfo }}
-            secondaryCurrencyInfo={{ ...secondaryInfo }}
-            exchangeSecondaryToPrimaryRatio={fiatPerCrypto}
-            overridePrimaryExchangeAmount={overridePrimaryExchangeAmount}
-            forceUpdateGuiCounter={0}
-            onExchangeAmountChanged={this.handleExchangeAmountChange}
-            onError={this.handleAmountChangeError}
-            onNext={this.handleCloseModal}
-            keyboardVisible={false}
-            isFocus
-            isFiatOnTop={bns.eq(overridePrimaryExchangeAmount, '0')}
-          />
-        </Card>
-      </View>
+      <Card marginRem={0}>
+        <ExchangedFlipInput
+          headerText={flipInputHeaderText}
+          headerLogo={flipInputHeaderLogo}
+          primaryCurrencyInfo={{ ...primaryInfo }}
+          secondaryCurrencyInfo={{ ...secondaryInfo }}
+          exchangeSecondaryToPrimaryRatio={fiatPerCrypto}
+          overridePrimaryExchangeAmount={overridePrimaryExchangeAmount}
+          forceUpdateGuiCounter={0}
+          onExchangeAmountChanged={this.handleExchangeAmountChange}
+          onError={this.handleAmountChangeError}
+          onNext={this.handleCloseModal}
+          keyboardVisible={false}
+          isFocus
+          isFiatOnTop={bns.eq(overridePrimaryExchangeAmount, '0')}
+        />
+      </Card>
     )
   }
 
@@ -179,11 +176,11 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <ThemedModal bridge={this.props.bridge} onCancel={this.handleCloseModal}>
+      <ThemedModal bridge={this.props.bridge} onCancel={this.handleCloseModal} paddingRem={1.5}>
+        {this.renderFlipInput()}
         {this.renderTitle()}
         {this.renderExchangeRates()}
         {this.renderBalance()}
-        {this.renderFlipInput()}
         {this.renderFees()}
       </ThemedModal>
     )
@@ -214,9 +211,6 @@ const getStyles = cacheStyles((theme: Theme) => ({
   },
   balanceString: {
     flex: 1
-  },
-  flipInputContainer: {
-    marginVertical: theme.rem(1)
   },
   feesContainer: {
     flexDirection: 'row',
