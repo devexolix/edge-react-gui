@@ -116,7 +116,7 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
     return (
       <View style={styles.exchangeRateContainer}>
         <EdgeText style={styles.exchangeRateDescriptionText}>{s.strings.string_rate}</EdgeText>
-        <ExchangeRate primaryInfo={primaryInfo} secondaryInfo={secondaryInfo} secondaryDisplayAmount={fiatPerCrypto} />
+        <ExchangeRate primaryInfo={primaryInfo} secondaryInfo={secondaryInfo} secondaryDisplayAmount={fiatPerCrypto} style={styles.exchangeRateText} />
       </View>
     )
   }
@@ -207,6 +207,9 @@ const getStyles = cacheStyles((theme: Theme) => ({
     flex: 1,
     fontSize: theme.rem(0.75),
     color: theme.secondaryText
+  },
+  exchangeRateText: {
+    fontSize: theme.rem(0.75)
   },
   balanceValue: {
     textAlign: 'right'

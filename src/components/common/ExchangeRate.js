@@ -2,6 +2,7 @@
 
 import { bns } from 'biggystring'
 import * as React from 'react'
+import { StyleSheet } from 'react-native'
 
 import { formatNumber } from '../../locales/intl.js'
 import s from '../../locales/strings.js'
@@ -14,7 +15,8 @@ type Props = {
   primaryInfo: GuiCurrencyInfo,
   primaryDisplayAmount?: string, // defaults to '1'
   secondaryInfo: GuiCurrencyInfo,
-  secondaryDisplayAmount: string
+  secondaryDisplayAmount: string,
+  style?: StyleSheet.Styles
 }
 
 class ExchangeRateComponent extends React.Component<Props & ThemeProps> {
@@ -29,7 +31,7 @@ class ExchangeRateComponent extends React.Component<Props & ThemeProps> {
   }
 
   render() {
-    const { primaryInfo, primaryDisplayAmount, secondaryInfo, secondaryDisplayAmount } = this.props
+    const { primaryInfo, primaryDisplayAmount, secondaryInfo, secondaryDisplayAmount, style } = this.props
 
     const primaryDisplayName: string = primaryInfo.displayDenomination.name
     const secondaryDisplaySymbol = secondaryInfo.displayDenomination.symbol ?? ''
@@ -58,11 +60,11 @@ class ExchangeRateComponent extends React.Component<Props & ThemeProps> {
     const formattedSecondaryAmount = formatNumber(formattedSecondaryDisplayAmount, { toFixed: precision })
 
     if (!isCompleteExchangeData(exchangeData)) {
-      return <EdgeText>{s.strings.drawer_exchange_rate_loading}</EdgeText>
+      return <EdgeText style={style}>{s.strings.drawer_exchange_rate_loading}</EdgeText>
     }
 
     const exchangeRate = `${formattedPrimaryAmount} ${primaryDisplayName} = ${secondaryDisplaySymbol} ${formattedSecondaryAmount} ${secondaryCurrencyCode}`
-    return <EdgeText>{exchangeRate}</EdgeText>
+    return <EdgeText style={style}>{exchangeRate}</EdgeText>
   }
 }
 
