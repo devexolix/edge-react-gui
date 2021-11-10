@@ -386,16 +386,19 @@ class SendComponent extends React.PureComponent<Props, State> {
     const { exchangeRates, lockInputs, nativeAmount, settings, theme, route } = this.props
     const { lockTilesMap = {}, hiddenTilesMap = {} } = route.params
     const { guiWallet, selectedCurrencyCode, recipientAddress } = this.state
+    const styles = getStyles(theme)
 
     if (recipientAddress && !hiddenTilesMap.amount) {
       let cryptoAmountSyntax
+      let cryptoAmountStyle = styles.amountText
       let fiatAmountSyntax
       const cryptoDisplayDenomination = UTILS.getDenomination(selectedCurrencyCode, settings, 'display')
       const cryptoExchangeDenomination = UTILS.getDenomination(selectedCurrencyCode, settings, 'exchange')
       const fiatDenomination = UTILS.getDenomFromIsoCode(guiWallet.fiatCurrencyCode)
       const fiatSymbol = fiatDenomination.symbol ? fiatDenomination.symbol : ''
       if (nativeAmount === '') {
-        cryptoAmountSyntax = s.strings.string_amount
+        cryptoAmountSyntax = s.strings.string_tap_to_edit
+        cryptoAmountStyle = styles.amountTextMuted
       } else if (nativeAmount != null && !bns.eq(nativeAmount, '0')) {
         const displayAmount = bns.div(nativeAmount, cryptoDisplayDenomination.multiplier, UTILS.DECIMAL_PRECISION)
         const exchangeAmount = bns.div(nativeAmount, cryptoExchangeDenomination.multiplier, UTILS.DECIMAL_PRECISION)
@@ -414,7 +417,7 @@ class SendComponent extends React.PureComponent<Props, State> {
           title={s.strings.fio_request_amount}
           onPress={lockInputs || lockTilesMap.amount ? undefined : this.handleFlipInputModal}
         >
-          <EdgeText style={{ fontSize: theme.rem(2) }}>{cryptoAmountSyntax}</EdgeText>
+          <EdgeText style={cryptoAmountStyle}>{cryptoAmountSyntax}</EdgeText>
           {fiatAmountSyntax == null ? null : <EdgeText>{fiatAmountSyntax}</EdgeText>}
         </Tile>
       )
@@ -614,6 +617,13 @@ const getStyles = cacheStyles((theme: Theme) => ({
   },
   errorMessage: {
     color: theme.dangerText
+  },
+  amountText: {
+    fontSize: theme.rem(2)
+  },
+  amountTextMuted: {
+    fontSize: theme.rem(2),
+    color: theme.secondaryText
   }
 }))
 
