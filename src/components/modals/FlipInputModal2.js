@@ -177,8 +177,7 @@ const getStyles = cacheStyles((theme: Theme) => ({
     color: theme.textLink
   },
   balanceContainer: {
-    flexDirection: 'row',
-    marginHorizontal: theme.rem(0.5)
+    flexDirection: 'row'
   },
   exchangeRateContainer: {
     flexDirection: 'row'
@@ -195,10 +194,12 @@ const getStyles = cacheStyles((theme: Theme) => ({
     fontSize: theme.rem(0.75)
   },
   balanceValue: {
-    textAlign: 'right'
+    fontSize: theme.rem(0.75)
   },
   balanceString: {
-    flex: 1
+    flex: 1,
+    fontSize: theme.rem(0.75),
+    color: theme.secondaryText
   },
   feesContainer: {
     flexDirection: 'row',
