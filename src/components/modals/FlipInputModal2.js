@@ -3,12 +3,11 @@
 import { bns } from 'biggystring'
 import { asMaybeNoAmountSpecifiedError } from 'edge-core-js'
 import * as React from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { View } from 'react-native'
 import { type AirshipBridge } from 'react-native-airship'
 import { sprintf } from 'sprintf-js'
 
 import { updateMaxSpend, updateTransactionAmount } from '../../actions/SendConfirmationActions.js'
-import { getSpecialCurrencyInfo } from '../../constants/WalletAndCurrencyConstants.js'
 import s from '../../locales/strings.js'
 import { getDisplayDenomination, getExchangeDenomination } from '../../selectors/DenominationSelectors.js'
 import { convertCurrencyFromExchangeRates, convertNativeToExchangeRateDenomination, getExchangeRate } from '../../selectors/WalletSelectors.js'
@@ -21,7 +20,6 @@ import { Card } from '../themed/Card'
 import { EdgeText } from '../themed/EdgeText.js'
 import { type ExchangedFlipInputAmounts, ExchangedFlipInput } from '../themed/ExchangedFlipInput'
 import { MiniButton } from '../themed/MiniButton.js'
-import { ModalTitle } from '../themed/ModalParts.js'
 import { ThemedModal } from '../themed/ThemedModal.js'
 
 type OwnProps = {
@@ -95,20 +93,6 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
 
   handleSendMaxAmount = () => this.props.updateMaxSpend(this.props.walletId, this.props.currencyCode)
 
-  renderTitle = () => {
-    const styles = getStyles(this.props.theme)
-    return (
-      <View style={styles.headerContainer}>
-        <ModalTitle>{s.strings.string_enter_amount}</ModalTitle>
-        {getSpecialCurrencyInfo(this.props.currencyCode).noMaxSpend !== true ? (
-          <TouchableOpacity onPress={this.handleSendMaxAmount}>
-            <EdgeText style={styles.headerMaxAmountText}>{s.strings.send_confirmation_max_button_title}</EdgeText>
-          </TouchableOpacity>
-        ) : null}
-      </View>
-    )
-  }
-
   renderExchangeRates = () => {
     const { primaryInfo, secondaryInfo, fiatPerCrypto, theme } = this.props
     const styles = getStyles(theme)
@@ -177,7 +161,6 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
         {this.renderFlipInput()}
         {this.renderFees()}
         {this.renderExchangeRates()}
-        {this.renderTitle()}
         {this.renderBalance()}
       </ThemedModal>
     )
