@@ -3,8 +3,9 @@
 import { bns } from 'biggystring'
 import { asMaybeNoAmountSpecifiedError } from 'edge-core-js'
 import * as React from 'react'
-import { View } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 import { type AirshipBridge } from 'react-native-airship'
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import { sprintf } from 'sprintf-js'
 
 import { updateMaxSpend, updateTransactionAmount } from '../../actions/SendConfirmationActions.js'
@@ -25,7 +26,8 @@ import { ThemedModal } from '../themed/ThemedModal.js'
 type OwnProps = {
   bridge: AirshipBridge<void>,
   walletId: string,
-  currencyCode: string
+  currencyCode: string,
+  onFeesChange: () => void
 }
 
 type StateProps = {
@@ -73,6 +75,11 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
   }
 
   handleCloseModal = () => this.props.bridge.resolve()
+
+  handleFeesChange = () => {
+    this.handleCloseModal()
+    this.props.onFeesChange()
+  }
 
   handleExchangeAmountChange = ({ nativeAmount, exchangeAmount }: ExchangedFlipInputAmounts) => {
     const { walletId, currencyCode, updateTransactionAmount } = this.props
@@ -149,7 +156,10 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
       feeSyntaxStyle === 'dangerText' ? styles.feesSyntaxDanger : feeSyntaxStyle === 'warningText' ? styles.feesSyntaxWarning : styles.feesSyntaxDefault
     return (
       <View style={styles.feesContainer}>
-        <EdgeText style={styles.feesContainerText}>{s.strings.string_fee}</EdgeText>
+        <View style={styles.feesDescriptionContainer}>
+          <EdgeText style={styles.feesContainerText}>{s.strings.string_fee}</EdgeText>
+          <FontAwesomeIcon name="edit" style={styles.feeIcon} size={theme.rem(0.75)} />
+        </View>
         <EdgeText style={feeStyle}>{feeSyntax}</EdgeText>
       </View>
     )
@@ -159,9 +169,13 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
     return (
       <ThemedModal bridge={this.props.bridge} onCancel={this.handleCloseModal} paddingRem={1.5}>
         {this.renderFlipInput()}
-        {this.renderFees()}
-        {this.renderExchangeRates()}
-        {this.renderBalance()}
+        <TouchableWithoutFeedback onPress={this.handleFeesChange}>
+          <View>
+            {this.renderFees()}
+            {this.renderExchangeRates()}
+            {this.renderBalance()}
+          </View>
+        </TouchableWithoutFeedback>
       </ThemedModal>
     )
   }
@@ -206,8 +220,12 @@ const getStyles = cacheStyles((theme: Theme) => ({
     marginTop: theme.rem(0.5),
     marginBottom: theme.rem(1)
   },
-  feesContainerText: {
+  feesDescriptionContainer: {
     flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  feesContainerText: {
     color: theme.secondaryText
   },
   feesSyntaxDefault: {
@@ -218,6 +236,10 @@ const getStyles = cacheStyles((theme: Theme) => ({
   },
   feesSyntaxDanger: {
     color: theme.dangerText
+  },
+  feeIcon: {
+    color: theme.iconTappable,
+    marginLeft: theme.rem(0.5)
   },
   spacer: {
     flex: 1
