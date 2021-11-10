@@ -165,12 +165,11 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
   renderFees = () => {
     const { feeSyntax, feeSyntaxStyle, theme } = this.props
     const styles = getStyles(theme)
-    const feeText = `+ ${s.strings.string_fee}`
     const feeStyle =
       feeSyntaxStyle === 'dangerText' ? styles.feesSyntaxDanger : feeSyntaxStyle === 'warningText' ? styles.feesSyntaxWarning : styles.feesSyntaxDefault
     return (
       <View style={styles.feesContainer}>
-        <EdgeText style={styles.feesContainerText}>{feeText}</EdgeText>
+        <EdgeText style={styles.feesContainerText}>{s.strings.string_fee}</EdgeText>
         <EdgeText style={feeStyle}>{feeSyntax}</EdgeText>
       </View>
     )
@@ -180,10 +179,10 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
     return (
       <ThemedModal bridge={this.props.bridge} onCancel={this.handleCloseModal} paddingRem={1.5}>
         {this.renderFlipInput()}
+        {this.renderFees()}
         {this.renderTitle()}
         {this.renderExchangeRates()}
         {this.renderBalance()}
-        {this.renderFees()}
       </ThemedModal>
     )
   }
@@ -215,11 +214,11 @@ const getStyles = cacheStyles((theme: Theme) => ({
     flex: 1
   },
   feesContainer: {
-    flexDirection: 'row',
-    marginHorizontal: theme.rem(1)
+    flexDirection: 'row'
   },
   feesContainerText: {
-    flex: 1
+    flex: 1,
+    color: theme.secondaryText
   },
   feesSyntaxDefault: {
     color: theme.primaryText
@@ -279,7 +278,7 @@ export const FlipInputModal = connect<StateProps, DispatchProps, OwnProps>(
       state.ui.scenes.sendConfirmation.transaction,
       state.ui.settings
     )
-    const feeSyntax = `${transactionFee.cryptoSymbol || ''} ${transactionFee.cryptoAmount} (${transactionFee.fiatSymbol || ''} ${transactionFee.fiatAmount})`
+    const feeSyntax = `${transactionFee.cryptoAmount} ${currencyCode} (${transactionFee.fiatSymbol || ''} ${transactionFee.fiatAmount})`
     const feeSyntaxStyle = transactionFee.fiatStyle
 
     // Error
