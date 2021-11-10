@@ -28,7 +28,7 @@ import { type GuiExchangeRates, type GuiMakeSpendInfo, type GuiWallet } from '..
 import * as UTILS from '../../util/utils.js'
 import { SceneWrapper } from '../common/SceneWrapper.js'
 import { ButtonsModal } from '../modals/ButtonsModal'
-import { FlipInputModal } from '../modals/FlipInputModal.js'
+import { FlipInputModal } from '../modals/FlipInputModal2.js'
 import { TextInputModal } from '../modals/TextInputModal.js'
 import type { WalletListResult } from '../modals/WalletListModal'
 import { WalletListModal } from '../modals/WalletListModal'
