@@ -46,10 +46,10 @@ type StateProps = {
 
   // Fees
   feeSyntax: string,
-  feeSyntaxStyle?: string
+  feeSyntaxStyle?: string,
 
   // Error
-  // errorMessage?: string
+  errorMessage?: string
 }
 
 type DispatchProps = {
@@ -99,6 +99,17 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
   }
 
   handleSendMaxAmount = () => this.props.updateMaxSpend(this.props.walletId, this.props.currencyCode)
+
+  renderErrorMessge = () => {
+    const { errorMessage = this.state.errorMessage, theme } = this.props
+    const styles = getStyles(theme)
+
+    return errorMessage != null ? (
+      <EdgeText numberOfLines={1} style={styles.exchangeRateErrorText}>
+        {errorMessage.split('\n')[0]}
+      </EdgeText>
+    ) : null
+  }
 
   renderExchangeRates = () => {
     const { primaryInfo, secondaryInfo, fiatPerCrypto, theme } = this.props
@@ -174,6 +185,7 @@ class FlipInputModalComponent extends React.PureComponent<Props, State> {
             {this.renderFees()}
             {this.renderExchangeRates()}
             {this.renderBalance()}
+            {this.renderErrorMessge()}
           </View>
         </TouchableWithoutFeedback>
       </ThemedModal>
@@ -197,6 +209,7 @@ const getStyles = cacheStyles((theme: Theme) => ({
     flexDirection: 'row'
   },
   exchangeRateErrorText: {
+    fontSize: theme.rem(0.75),
     color: theme.dangerText
   },
   exchangeRateDescriptionText: {
