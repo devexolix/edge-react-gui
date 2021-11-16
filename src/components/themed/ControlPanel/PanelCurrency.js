@@ -131,7 +131,7 @@ const getStyles = cacheStyles((theme: Theme) => ({
   },
   exchangeRateText: {
     fontSize: theme.rem(1),
-    fontFamily: theme.fontFaceBold,
+    fontFamily: theme.fontFaceMedium,
     color: theme.primaryText
   }
 }))

@@ -5,22 +5,22 @@ import { Platform, ScrollView, TouchableOpacity, View } from 'react-native'
 import Share from 'react-native-share'
 import { sprintf } from 'sprintf-js'
 
+import { logoutRequest } from '../../../actions/LoginActions.js'
+import { selectWalletFromModal } from '../../../actions/WalletActions.js'
 import { Fontello } from '../../../assets/vector/index.js'
 import { Airship } from '../../../components/services/AirshipInstance.js'
 import { FIO_ADDRESS_LIST, FIO_REQUEST_LIST, SCAN, SETTINGS_OVERVIEW_TAB, TERMS_OF_SERVICE } from '../../../constants/SceneKeys'
 import { getPrivateKeySweepableCurrencies } from '../../../constants/WalletAndCurrencyConstants.js'
 import s from '../../../locales/strings.js'
 import { THEME } from '../../../theme/variables/airbitz.js'
+import { useDispatch, useSelector } from '../../../types/reactRedux.js'
 import { type ParamList, Actions } from '../../../types/routerTypes.js'
 import { type WalletListResult, WalletListModal } from '../../modals/WalletListModal.js'
 import { SWEEP_PRIVATE_KEY } from '../../scenes/ScanScene'
 import { type Theme, cacheStyles, useTheme } from '../../services/ThemeContext.js'
 import { EdgeText } from '../EdgeText'
 
-export type Props = {
-  onLogout: (username?: string) => void,
-  onSelectWallet: (walletId: string, currencyCode: string) => void
-}
+export type Props = {}
 
 type RowProps = {
   title: string,
@@ -30,14 +30,18 @@ type RowProps = {
 }
 
 export function PanelList(props: Props) {
-  const { onSelectWallet, onLogout } = props
+  const dispatch = useDispatch()
 
+  const handleLogout = () => dispatch(logoutRequest())
+
+  const selectedCurrencyCode = useSelector(state => state.ui.wallets.selectedWalletId)
+  const selectedWalletId = useSelector(state => state.ui.wallets.selectedCurrencyCode)
   const onSweep = () => {
     Airship.show(bridge => (
       <WalletListModal bridge={bridge} headerTitle={s.strings.select_wallet} allowedCurrencyCodes={getPrivateKeySweepableCurrencies()} showCreateWallet />
     )).then(({ walletId, currencyCode }: WalletListResult) => {
       if (walletId && currencyCode) {
-        onSelectWallet(walletId, currencyCode)
+        dispatch(selectWalletFromModal(selectedWalletId, selectedCurrencyCode))
         Actions.jump(SCAN, {
           data: SWEEP_PRIVATE_KEY
         })
@@ -81,15 +85,11 @@ export function PanelList(props: Props) {
     }
 
     return (
-      <TouchableOpacity onPress={onPressHandler}>
-        <View style={styles.row}>
-          <View style={styles.iconContainer}>
-            <Fontello name={iconName} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
-          </View>
-          <View>
-            <EdgeText style={styles.text}>{title}</EdgeText>
-          </View>
+      <TouchableOpacity onPress={onPressHandler} style={styles.row}>
+        <View style={styles.iconContainer}>
+          <Fontello name={iconName} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
         </View>
+        <EdgeText style={styles.text}>{title}</EdgeText>
       </TouchableOpacity>
     )
   }
@@ -112,7 +112,7 @@ export function PanelList(props: Props) {
       paddingRight: theme.rem(2.5)
     },
     text: {
-      fontFamily: theme.fontFaceBold
+      fontFamily: theme.fontFaceMedium
     },
     iconSize: {
       width: theme.rem(2),
@@ -132,7 +132,7 @@ export function PanelList(props: Props) {
     { title: s.strings.title_terms_of_service, route: TERMS_OF_SERVICE, iconName: 'tos' },
     { title: s.strings.string_share + ' ' + s.strings.app_name, onPress: onShareApp, iconName: 'share' },
     { title: s.strings.settings_title, route: SETTINGS_OVERVIEW_TAB, iconName: 'settings' },
-    { title: s.strings.settings_button_logout, onPress: onLogout, iconName: 'logout' }
+    { title: s.strings.settings_button_logout, onPress: handleLogout, iconName: 'logout' }
   ]
 
   const rows = []

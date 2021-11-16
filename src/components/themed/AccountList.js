@@ -20,13 +20,7 @@ import { type Theme, cacheStyles, useTheme } from '../services/ThemeContext'
 import { DividerLine } from '../themed/DividerLine'
 import { EdgeText } from '../themed/EdgeText'
 
-type Props = {
-  onToggle: (isOpen: boolean) => void,
-  duration?: number
-}
-
-export function AccountList(props: Props) {
-  const { onToggle, duration = 500 } = props
+export function AccountList(onToggle: (isOpen: boolean) => void, duration?: number) {
   const activeUsername = useSelector(state => state.core.account.username)
   const context = useSelector(state => state.core.context)
   const dispatch = useDispatch()
