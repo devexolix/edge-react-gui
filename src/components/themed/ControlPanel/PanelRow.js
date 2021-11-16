@@ -44,7 +44,7 @@ function PanelRow(props: Props) {
           <Fontello name={iconName} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
         </View>
         <View>
-          <EdgeText style={styles.text}>{title}</EdgeText>
+          <EdgeText style={styles.text}>wtf</EdgeText>
         </View>
       </View>
     </TouchableOpacity>
@@ -54,8 +54,10 @@ function PanelRow(props: Props) {
 const getStyles = cacheStyles((theme: Theme) => ({
   iconContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: theme.rem(1.5)
+    justifyContent: 'right',
+    marginRight: theme.rem(1),
+    width: 'auto',
+    aspectRatio: 1
   },
   row: {
     color: 'white',

@@ -252,7 +252,7 @@ export class MainComponent extends React.Component<Props> {
         contentComponent={ControlPanel}
         hideDrawerButton
         drawerPosition="right"
-        drawerWidth={scale(250)}
+        drawerWidth={scale(260)}
       >
         {/* Wrapper Scene needed to fix a bug where the tabs would reload as a modal ontop of itself */}
         <Scene key="AllMyTabs" hideNavBar>

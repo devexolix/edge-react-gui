@@ -3,7 +3,7 @@
 import { type EdgeUserInfo } from 'edge-core-js'
 import * as React from 'react'
 import { Pressable, ScrollView, TouchableHighlight, View } from 'react-native'
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import Animated, { Easing, useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { sprintf } from 'sprintf-js'
@@ -12,7 +12,7 @@ import { deleteLocalAccount } from '../../actions/AccountActions.js'
 import { logoutRequest } from '../../actions/LoginActions.js'
 import { Fontello } from '../../assets/vector'
 import s from '../../locales/strings'
-import { useEffect, useState } from '../../types/reactHooks'
+import { useEffect, useMemo, useState } from '../../types/reactHooks'
 import { useDispatch, useSelector } from '../../types/reactRedux'
 import { ButtonsModal } from '../modals/ButtonsModal.js'
 import { Airship } from '../services/AirshipInstance.js'
@@ -21,22 +21,23 @@ import { DividerLine } from '../themed/DividerLine'
 import { EdgeText } from '../themed/EdgeText'
 
 type Props = {
-  onPress: () => void,
-  isOpen: boolean,
+  onToggle: (isOpen: boolean) => void,
   duration?: number
 }
 
 export function AccountList(props: Props) {
-  const { isOpen, onPress, duration = 500 } = props
+  const { onToggle, duration = 500 } = props
   const activeUsername = useSelector(state => state.core.account.username)
   const context = useSelector(state => state.core.context)
   const dispatch = useDispatch()
   const theme = useTheme()
   const styles = getStyles(theme)
 
+  const memoUserlist = useMemo(() => arrangeUsers(context.localUsers, activeUsername), [activeUsername, context])
+
   // Maintain the list of usernames:
-  const [usernames, setUsernames] = useState(arrangeUsers(context.localUsers, activeUsername))
-  useEffect(() => context.watch('localUsers', localUsers => setUsernames(arrangeUsers(localUsers, activeUsername))), [activeUsername, context])
+  const [usernames, setUsernames] = useState(memoUserlist)
+  useEffect(() => context.watch('localUsers', localUsers => setUsernames(memoUserlist)), [memoUserlist, context])
 
   const handleDelete = (username: string) => {
     Airship.show(bridge => (
@@ -64,10 +65,8 @@ export function AccountList(props: Props) {
   }
 
   const listHeight = styles.row.height * usernames.length + theme.rem(1)
-  const height = useSharedValue(isOpen ? listHeight : 0)
-  useEffect(() => {
-    height.value = isOpen ? listHeight : 0
-  }, [height, isOpen, listHeight])
+  const isOpen = useSharedValue(false)
+  const height = useDerivedValue(() => (isOpen.value ? listHeight : 0), isOpen)
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -78,11 +77,16 @@ export function AccountList(props: Props) {
     }
   })
 
+  const handleOpen = () => {
+    isOpen.value = !isOpen.value
+    onToggle(isOpen.value)
+  }
+
   return (
     <View>
-      <Pressable onPress={onPress}>
+      <Pressable onPress={handleOpen}>
         <View style={styles.header}>
-          <Fontello name="edge.logo" style={styles.iconUser} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
+          <Fontello name="account" style={styles.iconUser} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
           <EdgeText style={styles.text}>{activeUsername}</EdgeText>
           {isOpen ? (
             <Feather name="chevron-up" color={theme.controlPanelIcon} size={theme.rem(1.5)} />

@@ -98,7 +98,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) uses photos to retrieve QR Code images.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
