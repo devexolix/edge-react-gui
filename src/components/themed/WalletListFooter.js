@@ -6,13 +6,14 @@ import { Alert, TouchableOpacity, View } from 'react-native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 
 import { CREATE_WALLET_SELECT_CRYPTO, CREATE_WALLET_SELECT_FIAT, MANAGE_TOKENS } from '../../constants/SceneKeys.js'
-import { getSpecialCurrencyInfo } from '../../constants/WalletAndCurrencyConstants.js'
+import { getSpecialCurrencyInfo, getTokenCurrencies } from '../../constants/WalletAndCurrencyConstants.js'
 import s from '../../locales/strings.js'
 import { connect } from '../../types/reactRedux.js'
 import { Actions } from '../../types/routerTypes.js'
 import { type GuiWallet } from '../../types/types.js'
 import { makeCreateWalletType } from '../../util/CurrencyInfoHelpers.js'
 import { ButtonsModal } from '../modals/ButtonsModal.js'
+import { type WalletListResult, WalletListModal } from '../modals/WalletListModal.js'
 import { Airship } from '../services/AirshipInstance.js'
 import { type Theme, type ThemeProps, cacheStyles, withTheme } from '../services/ThemeContext.js'
 import { EdgeText } from './EdgeText.js'
@@ -53,14 +54,31 @@ class WalletListFooterComponent extends React.PureComponent<StateProps & ThemePr
     const { account, wallets } = this.props
 
     // check for existence of any token-enabled wallets
+    let walletCount: number = 0
+    let guiWallet: GuiWallet
+
     for (const key of Object.keys(wallets)) {
       const wallet = wallets[key]
       const specialCurrencyInfo = getSpecialCurrencyInfo(wallet.currencyCode)
       if (specialCurrencyInfo.isCustomTokensSupported) {
-        return Actions.push(MANAGE_TOKENS, {
-          guiWallet: wallet
-        })
+        guiWallet = wallet
+        walletCount++
       }
+    }
+
+    if (walletCount === 1 && guiWallet) {
+      return Actions.push(MANAGE_TOKENS, { guiWallet })
+    }
+
+    if (walletCount > 1) {
+      Airship.show(bridge => <WalletListModal bridge={bridge} headerTitle={s.strings.select_wallet} allowedCurrencyCodes={getTokenCurrencies()} />).then(
+        ({ walletId, currencyCode }: WalletListResult) => {
+          if (walletId && currencyCode) {
+            Actions.push(MANAGE_TOKENS, { guiWallet: wallets[walletId] })
+          }
+        }
+      )
+      return
     }
 
     // if no token-enabled wallets then allow creation of token-enabled wallet
