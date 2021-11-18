@@ -8,7 +8,6 @@ import { sprintf } from 'sprintf-js'
 import { logoutRequest } from '../../../actions/LoginActions.js'
 import { selectWalletFromModal } from '../../../actions/WalletActions.js'
 import { Fontello } from '../../../assets/vector/index.js'
-import { Airship } from '../../../components/services/AirshipInstance.js'
 import { FIO_ADDRESS_LIST, FIO_REQUEST_LIST, SCAN, SETTINGS_OVERVIEW_TAB, TERMS_OF_SERVICE, WALLET_CONNECT } from '../../../constants/SceneKeys'
 import { EDGE_URL, getPrivateKeySweepableCurrencies } from '../../../constants/WalletAndCurrencyConstants.js'
 import s from '../../../locales/strings.js'
@@ -16,14 +15,15 @@ import { useDispatch, useSelector } from '../../../types/reactRedux.js'
 import { type NavigationProp, type ParamList, Actions } from '../../../types/routerTypes.js'
 import { type WalletListResult, WalletListModal } from '../../modals/WalletListModal.js'
 import { SWEEP_PRIVATE_KEY } from '../../scenes/ScanScene'
+import { Airship } from '../../services/AirshipInstance.js'
 import { type Theme, cacheStyles, useTheme } from '../../services/ThemeContext.js'
-import { EdgeText } from '../EdgeText'
+import { EdgeText } from '../../themed/EdgeText'
 
 type Props = {
   navigation: NavigationProp<'controlPanel'>
 }
 
-export function PanelList(props: Props) {
+export function ControlPanelList(props: Props) {
   const { navigation } = props
   const theme = useTheme()
 

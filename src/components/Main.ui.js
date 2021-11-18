@@ -10,7 +10,6 @@ import { registerDevice } from '../actions/DeviceIdActions.js'
 import { logoutRequest } from '../actions/LoginActions.js'
 import { checkAndShowGetCryptoModal } from '../actions/ScanActions.js'
 import { showReEnableOtpModal } from '../actions/SettingsActions.js'
-import { ControlPanel } from '../components/navigation/ControlPanel'
 import { CreateWalletChoiceComponent } from '../components/scenes/CreateWalletChoiceScene.js'
 import { CreateWalletImportScene } from '../components/scenes/CreateWalletImportScene.js'
 import { CreateWalletReviewScene } from '../components/scenes/CreateWalletReviewScene.js'
@@ -38,6 +37,7 @@ import { SwapSettingsScene } from '../components/scenes/SwapSettingsScene.js'
 import { TransactionsExportScene } from '../components/scenes/TransactionsExportScene.js'
 import { WalletListScene } from '../components/scenes/WalletListScene.js'
 import { requestPermission } from '../components/services/PermissionsManager.js'
+import { ControlPanel } from '../components/themed/ControlPanel/ControlPanel'
 import {
   ADD_TOKEN,
   CHANGE_MINING_FEE,

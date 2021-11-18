@@ -8,22 +8,22 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { sprintf } from 'sprintf-js'
 
-import { deleteLocalAccount } from '../../actions/AccountActions.js'
-import { logoutRequest } from '../../actions/LoginActions.js'
-import edgeLogo from '../../assets/images/edgeLogo/Edge_logo_S.png'
-import { Fontello } from '../../assets/vector'
-import s from '../../locales/strings'
-import { useEffect, useState } from '../../types/reactHooks'
-import { useDispatch, useSelector } from '../../types/reactRedux'
-import { type NavigationProp } from '../../types/routerTypes.js'
-import { SceneWrapper } from '../common/SceneWrapper.js'
-import { ButtonsModal } from '../modals/ButtonsModal.js'
-import { Airship } from '../services/AirshipInstance.js'
-import { type Theme, cacheStyles, useTheme } from '../services/ThemeContext'
-import { PanelCurrency } from '../themed/ControlPanel/PanelCurrency.js'
-import { PanelList } from '../themed/ControlPanel/PanelList.js'
-import { DividerLine } from '../themed/DividerLine'
-import { EdgeText } from '../themed/EdgeText'
+import { deleteLocalAccount } from '../../../actions/AccountActions.js'
+import { logoutRequest } from '../../../actions/LoginActions.js'
+import edgeLogo from '../../../assets/images/edgeLogo/Edge_logo_S.png'
+import { Fontello } from '../../../assets/vector'
+import s from '../../../locales/strings'
+import { useEffect, useState } from '../../../types/reactHooks'
+import { useDispatch, useSelector } from '../../../types/reactRedux'
+import { type NavigationProp } from '../../../types/routerTypes.js'
+import { SceneWrapper } from '../../common/SceneWrapper.js'
+import { ButtonsModal } from '../../modals/ButtonsModal.js'
+import { Airship } from '../../services/AirshipInstance.js'
+import { type Theme, cacheStyles, useTheme } from '../../services/ThemeContext'
+import { DividerLine } from '../DividerLine'
+import { EdgeText } from '../EdgeText'
+import { ControlPanelList } from './ControlPanelList.js'
+import { ControlPanelRateTicker } from './ControlPanelRateTicker.js'
 
 type Props = { navigation: NavigationProp<'controlPanel'>, isDrawerOpen: { state: { isDrawerOpen: boolean } } }
 
@@ -119,7 +119,7 @@ export function ControlPanel(props: Props) {
           <View style={styles.logo}>
             <Image style={styles.logoImage} source={edgeLogo} resizeMode="contain" />
           </View>
-          <PanelCurrency />
+          <ControlPanelRateTicker />
           <View>
             <Pressable onPress={handleToggleDropdown}>
               <View style={styles.dropdownHeader}>
@@ -149,8 +149,7 @@ export function ControlPanel(props: Props) {
             </Animated.View>
           </View>
         </View>
-        {}
-        <PanelList navigation={navigation} />
+        <ControlPanelList navigation={navigation} />
         <DividerLine marginRem={[1, -2, 2, 1.25]} />
         <Animated.View style={[styles.disable, aFade]} pointerEvents="none" />
         {!isDropped ? null : <Pressable style={styles.invisibleTapper} onPress={handleToggleDropdown} />}

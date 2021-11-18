@@ -26,7 +26,7 @@ export type StateProps = {
   usersView: boolean
 }
 
-export function PanelCurrency() {
+export function ControlPanelRateTicker() {
   const theme = useTheme()
   const styles = getStyles(theme)
   const {
@@ -128,5 +128,3 @@ const getStyles = cacheStyles((theme: Theme) => ({
     marginLeft: theme.rem(0.5)
   }
 }))
-
-export default PanelCurrency
