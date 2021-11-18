@@ -44,6 +44,7 @@ export const validatePassword =
         secureTextEntry
         submitLabel={submitLabel}
         title={s.strings.confirm_password_text}
+        buttonType="secondary"
         onSubmit={async password => {
           const isOk = await account.checkPassword(password)
           if (!isOk) return s.strings.password_reminder_invalid

@@ -27,6 +27,7 @@ type Props = {|
   initialValue?: string,
   inputLabel?: string,
   submitLabel?: string,
+  buttonType?: 'primary' | 'secondary',
 
   // Text input options:
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters',
@@ -51,6 +52,7 @@ export function TextInputModal(props: Props) {
     secureTextEntry,
     multiline = false,
     submitLabel = s.strings.submit,
+    buttonType,
     title
   } = props
 
@@ -107,9 +109,9 @@ export function TextInputModal(props: Props) {
         Platform.OS === 'android' ? <View style={{ flex: 2 }} /> : null
       }
       {spinning ? (
-        <MainButton alignSelf="center" disabled marginRem={0.5} spinner />
+        <MainButton alignSelf="center" disabled marginRem={0.5} type={buttonType} spinner />
       ) : (
-        <MainButton alignSelf="center" label={submitLabel} marginRem={0.5} onPress={handleSubmit} />
+        <MainButton alignSelf="center" label={submitLabel} marginRem={0.5} onPress={handleSubmit} type={buttonType} />
       )}
       <ModalCloseArrow onPress={() => bridge.resolve(undefined)} />
     </ThemedModal>
