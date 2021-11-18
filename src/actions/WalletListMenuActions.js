@@ -155,7 +155,7 @@ export function walletListMenuAction(walletId: string, option: WalletListMenuKey
               title={s.strings.fragment_wallets_get_seed_wallet}
               bridge={bridge}
               message={wallet.displayPrivateSeed ?? ''}
-              buttons={{ ok: { label: s.strings.string_ok_cap } }}
+              buttons={{ ok: { label: s.strings.string_ok_cap, type: 'secondary' } }}
             />
           ))
         }
