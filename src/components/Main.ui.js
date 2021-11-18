@@ -10,7 +10,7 @@ import { registerDevice } from '../actions/DeviceIdActions.js'
 import { logoutRequest } from '../actions/LoginActions.js'
 import { checkAndShowGetCryptoModal } from '../actions/ScanActions.js'
 import { showReEnableOtpModal } from '../actions/SettingsActions.js'
-import ControlPanel from '../components/navigation/ControlPanel'
+import { ControlPanel } from '../components/navigation/ControlPanel'
 import { CreateWalletChoiceComponent } from '../components/scenes/CreateWalletChoiceScene.js'
 import { CreateWalletImportScene } from '../components/scenes/CreateWalletImportScene.js'
 import { CreateWalletReviewScene } from '../components/scenes/CreateWalletReviewScene.js'
@@ -252,7 +252,7 @@ export class MainComponent extends React.Component<Props> {
         contentComponent={ControlPanel}
         hideDrawerButton
         drawerPosition="right"
-        drawerWidth={scale(260)}
+        drawerWidth={scale(270)}
       >
         {/* Wrapper Scene needed to fix a bug where the tabs would reload as a modal ontop of itself */}
         <Scene key="AllMyTabs" hideNavBar>

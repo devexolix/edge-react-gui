@@ -49,7 +49,7 @@
 		DA89DDF820F2CFD70012B4BD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA89DDF720F2CFD70012B4BD /* GoogleService-Info.plist */; };
 		DAF7C41220C505CC005B7898 /* plugins in Resources */ = {isa = PBXBuildFile; fileRef = DAF7C41120C505CC005B7898 /* plugins */; };
 		DD6AFCA09B5C4FE492CE85B3 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A24579DBB224E899CD34EB5 /* Feather.ttf */; };
-		E4D2A9FB2743159700255379 /* custom.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4D2A9FA2743159700255379 /* custom.ttf */; };
+		E4D2A9FD27448A4200255379 /* custom.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4D2A9FC27448A4200255379 /* custom.ttf */; };
 		F0D7D6C909584919867CD8B5 /* SourceSansPro-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3174EFC33129444580156447 /* SourceSansPro-BlackItalic.ttf */; };
 		F3343A739BF04CF1B73A6AA6 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8203ECA416CB4127BE7B00B3 /* SourceSansPro-Regular.ttf */; };
 		F4A41DF580AB4DA18363D332 /* SourceSansPro-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67EDE898A18B445AB08D1ED3 /* SourceSansPro-ExtraLight.ttf */; };
@@ -111,7 +111,7 @@
 		DAF7C41120C505CC005B7898 /* plugins */ = {isa = PBXFileReference; lastKnownFileType = folder; path = plugins; sourceTree = "<group>"; };
 		DCFC9E062F0D18DD4E39B5C5 /* libPods-edge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-edge.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFA960589B804EA49FB632D4 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		E4D2A9FA2743159700255379 /* custom.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = custom.ttf; sourceTree = "<group>"; };
+		E4D2A9FC27448A4200255379 /* custom.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = custom.ttf; sourceTree = "<group>"; };
 		E682D9AD200DF9A70042F9BA /* edge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = edge.entitlements; path = edge/edge.entitlements; sourceTree = "<group>"; };
 		E8A5D040BE61456AA7CDF17A /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		FD982BCB1FACDEF00057F035 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
@@ -155,7 +155,7 @@
 		3BB21E930C5F437EB1EAE492 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E4D2A9FA2743159700255379 /* custom.ttf */,
+				E4D2A9FC27448A4200255379 /* custom.ttf */,
 				6E22C89A256B72B200080A59 /* Quicksand-Bold.ttf */,
 				6EBB19C8256ABDD4006E5A8F /* Quicksand-Light.ttf */,
 				6EBB19CA256ABDD4006E5A8F /* Quicksand-Medium.ttf */,
@@ -367,7 +367,7 @@
 				3D57B7836E1043A9B50D9EF3 /* FontAwesome5_Solid.ttf in Resources */,
 				11B412C217AC4438A2811BA2 /* Fontisto.ttf in Resources */,
 				62A3FA6741184407B75621D8 /* Foundation.ttf in Resources */,
-				E4D2A9FB2743159700255379 /* custom.ttf in Resources */,
+				E4D2A9FD27448A4200255379 /* custom.ttf in Resources */,
 				8ADE7562081A42D2971BACDB /* Ionicons.ttf in Resources */,
 				3D037459CEF04B6586863F61 /* MaterialCommunityIcons.ttf in Resources */,
 				6EFD841834DD4CE6B519538E /* MaterialIcons.ttf in Resources */,

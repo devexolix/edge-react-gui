@@ -15,6 +15,7 @@ import { Fontello } from '../../assets/vector'
 import s from '../../locales/strings'
 import { useEffect, useState } from '../../types/reactHooks'
 import { useDispatch, useSelector } from '../../types/reactRedux'
+import { type NavigationProp } from '../../types/routerTypes.js'
 import { SceneWrapper } from '../common/SceneWrapper.js'
 import { ButtonsModal } from '../modals/ButtonsModal.js'
 import { Airship } from '../services/AirshipInstance.js'
@@ -24,36 +25,36 @@ import { PanelList } from '../themed/ControlPanel/PanelList.js'
 import { DividerLine } from '../themed/DividerLine'
 import { EdgeText } from '../themed/EdgeText'
 
-type Props = { navigation: { state: { isDrawerOpen: boolean } } }
+type Props = { navigation: NavigationProp<'controlPanel'>, isDrawerOpen: { state: { isDrawerOpen: boolean } } }
 
-export default function ControlPanel(props: Props) {
-  const { isDrawerOpen } = props.navigation.state
+export function ControlPanel(props: Props) {
+  const { navigation, isDrawerOpen } = props
   const dispatch = useDispatch()
   const theme = useTheme()
   const styles = getStyles(theme)
 
-  // Redux state:
+  // ---- Redux State ----
+
   const activeUsername = useSelector(state => state.core.account.username)
   const context = useSelector(state => state.core.context)
 
-  /// ---- local state ----
+  /// ---- Local State ----
 
   // Maintain the list of usernames:
   const [usernames, setUsernames] = useState(() => arrangeUsers(context.localUsers, activeUsername))
   useEffect(() => context.watch('localUsers', localUsers => setUsernames(arrangeUsers(context.localUsers, activeUsername))), [context, activeUsername])
 
-  // User list dopdown state:
+  // User List dropdown/open state:
   const [isDropped, setIsDropped] = useState(false)
-  const handleToggleAccountDropdown = () => {
+  const handleToggleDropdown = () => {
     setIsDropped(!isDropped)
   }
   useEffect(() => {
     if (!isDrawerOpen) setIsDropped(false)
   }, [isDrawerOpen])
 
-  /// ---- callbacks ----
+  /// ---- Callbacks ----
 
-  // AccountList Fns
   const handleDeleteAccount = (username: string) => {
     Airship.show(bridge => (
       <ButtonsModal
@@ -78,34 +79,37 @@ export default function ControlPanel(props: Props) {
     dispatch(logoutRequest(username))
   }
 
-  /// ---- animations ----
+  /// ---- Animation ----
 
-  // Track the height of the dropdown:
-  const userListHeight = styles.row.height * usernames.length + theme.rem(1)
-  const heightAnimation = useSharedValue(userListHeight)
-  useEffect(() => {
-    heightAnimation.value = withTiming(userListHeight)
-  }, [heightAnimation, userListHeight])
+  // Track the destination height of the dropdown
+  const userListMaxHeight = styles.dropdownRow.height * usernames.length + theme.rem(1)
 
-  // User list dropdown animation:
-  const dropAnimation = useSharedValue(0)
+  // Height value above can change if users are added/removed
+  const sMaxHeight = useSharedValue(userListMaxHeight)
   useEffect(() => {
-    dropAnimation.value = withTiming(isDropped ? 1 : 0, {
-      duration: 700,
-      easing: Easing.inOut(Easing.cubic)
+    sMaxHeight.value = withTiming(userListMaxHeight)
+  }, [sMaxHeight, userListMaxHeight])
+
+  // Animation completion ratio/multiplier
+  // Shared to sync fade & drop animations
+  const sAnimationMult = useSharedValue(0)
+  useEffect(() => {
+    sAnimationMult.value = withTiming(isDropped ? 1 : 0, {
+      duration: 500,
+      easing: Easing.inOut(Easing.circle)
     })
-  }, [dropAnimation, isDropped])
+  }, [sAnimationMult, isDropped])
 
-  /// ---- dynamic css ----
+  /// ---- Dynamic CSS ----
 
-  const dropdownAnimatedStyle = useAnimatedStyle(() => ({
-    height: heightAnimation.value * dropAnimation.value
+  const aDropdown = useAnimatedStyle(() => ({
+    height: sMaxHeight.value * sAnimationMult.value
   }))
-  const fadeAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: 0.8 * dropAnimation.value
+  const aFade = useAnimatedStyle(() => ({
+    opacity: 0.8 * sAnimationMult.value
   }))
-  const flipAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotateZ: `${(isDropped ? -180 : 180) * dropAnimation.value}deg` }]
+  const aRotate = useAnimatedStyle(() => ({
+    transform: [{ rotateZ: `${(isDropped ? -180 : 180) * sAnimationMult.value}deg` }]
   }))
 
   return (
@@ -117,20 +121,20 @@ export default function ControlPanel(props: Props) {
           </View>
           <PanelCurrency />
           <View>
-            <Pressable onPress={handleToggleAccountDropdown}>
+            <Pressable onPress={handleToggleDropdown}>
               <View style={styles.dropdownHeader}>
-                <Fontello name="account" style={styles.iconUser} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
+                <Fontello name="account" style={styles.icon} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
                 <EdgeText style={styles.text}>{activeUsername}</EdgeText>
-                <Animated.View style={flipAnimatedStyle}>
+                <Animated.View style={aRotate}>
                   <Feather name="chevron-down" color={theme.controlPanelIcon} size={theme.rem(1.5)} />
                 </Animated.View>
               </View>
             </Pressable>
             <DividerLine marginRem={[1, -2, 0, 0]} />
-            <Animated.View style={[styles.root, dropdownAnimatedStyle]}>
+            <Animated.View style={[styles.root, aDropdown]}>
               <ScrollView>
                 {usernames.map((username: string) => (
-                  <View key={username} style={styles.row}>
+                  <View key={username} style={styles.dropdownRow}>
                     <TouchableHighlight onPress={() => handleSwitchAccount(username)}>
                       <EdgeText style={styles.text}>{username}</EdgeText>
                     </TouchableHighlight>
@@ -145,10 +149,11 @@ export default function ControlPanel(props: Props) {
             </Animated.View>
           </View>
         </View>
-        <PanelList />
-        <DividerLine marginRem={[1, -2, 2, 0]} />
-        <Animated.View style={[styles.disable, fadeAnimatedStyle]} pointerEvents="none" />
-        {!isDropped ? null : <Pressable style={styles.invisibleTapper} onPress={handleToggleAccountDropdown} />}
+        {}
+        <PanelList navigation={navigation} />
+        <DividerLine marginRem={[1, -2, 2, 1.25]} />
+        <Animated.View style={[styles.disable, aFade]} pointerEvents="none" />
+        {!isDropped ? null : <Pressable style={styles.invisibleTapper} onPress={handleToggleDropdown} />}
       </View>
     </SceneWrapper>
   )
@@ -187,9 +192,8 @@ const getStyles = cacheStyles((theme: Theme) => ({
     flex: 1,
     backgroundColor: theme.modal,
     position: 'relative',
-    paddingLeft: theme.rem(1.2),
     paddingRight: theme.rem(2),
-    paddingTop: theme.rem(13),
+    paddingTop: theme.rem(13.25),
     borderBottomLeftRadius: theme.rem(2),
     borderTopLeftRadius: theme.rem(2)
   },
@@ -238,25 +242,33 @@ const getStyles = cacheStyles((theme: Theme) => ({
   root: {
     overflow: 'scroll'
   },
-  row: {
+  dropdownRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: theme.rem(2.5),
-    marginLeft: theme.rem(2)
+    marginLeft: theme.rem(8.25)
   },
   text: {
-    marginRight: 'auto',
-    fontFamily: theme.fontFaceMedium
+    fontFamily: theme.fontFaceMedium,
+    marginLeft: theme.rem(-5)
   },
   dropdownHeader: {
-    display: 'flex',
+    marginLeft: theme.rem(-0.25),
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
     height: theme.rem(2)
   },
-  iconUser: {
-    marginRight: theme.rem(1.5)
+  icon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: theme.rem(0.5),
+    marginRight: theme.rem(0.5),
+    height: theme.rem(1.5),
+    width: theme.rem(2.5)
+  },
+  chevron: {
+    marginRight: theme.rem(-0.5)
   }
 }))
