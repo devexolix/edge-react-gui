@@ -6,7 +6,7 @@ import { Alert, TouchableOpacity, View } from 'react-native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 
 import { CREATE_WALLET_SELECT_CRYPTO, CREATE_WALLET_SELECT_FIAT, MANAGE_TOKENS } from '../../constants/SceneKeys.js'
-import { getSpecialCurrencyInfo, getTokenCurrencies } from '../../constants/WalletAndCurrencyConstants.js'
+import { getCurrenciesSelectedInfo, getSpecialCurrencyInfo } from '../../constants/WalletAndCurrencyConstants.js'
 import s from '../../locales/strings.js'
 import { connect } from '../../types/reactRedux.js'
 import { Actions } from '../../types/routerTypes.js'
@@ -71,13 +71,13 @@ class WalletListFooterComponent extends React.PureComponent<StateProps & ThemePr
     }
 
     if (walletCount > 1) {
-      Airship.show(bridge => <WalletListModal bridge={bridge} headerTitle={s.strings.select_wallet} allowedCurrencyCodes={getTokenCurrencies()} />).then(
-        ({ walletId, currencyCode }: WalletListResult) => {
-          if (walletId && currencyCode) {
-            Actions.push(MANAGE_TOKENS, { guiWallet: wallets[walletId] })
-          }
+      Airship.show(bridge => (
+        <WalletListModal bridge={bridge} headerTitle={s.strings.select_wallet} allowedCurrencyCodes={getCurrenciesSelectedInfo('isCustomTokensSupported')} />
+      )).then(({ walletId, currencyCode }: WalletListResult) => {
+        if (walletId && currencyCode) {
+          Actions.push(MANAGE_TOKENS, { guiWallet: wallets[walletId] })
         }
-      )
+      })
       return
     }
 

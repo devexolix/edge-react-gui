@@ -36,7 +36,7 @@ import {
   TERMS_OF_SERVICE,
   WALLET_LIST_SCENE
 } from '../../../../../constants/SceneKeys.js'
-import { getPrivateKeySweepableCurrencies } from '../../../../../constants/WalletAndCurrencyConstants.js'
+import { getCurrenciesSelectedInfo } from '../../../../../constants/WalletAndCurrencyConstants.js'
 import s from '../../../../../locales/strings.js'
 import { THEME } from '../../../../../theme/variables/airbitz.js'
 import { connect } from '../../../../../types/reactRedux.js'
@@ -215,7 +215,12 @@ const SweepPrivateKeyButton = (props: SweepPrivateKeyButtonProps) => {
   const { onSelectWallet } = props
   const handlePress = () => {
     Airship.show(bridge => (
-      <WalletListModal bridge={bridge} headerTitle={s.strings.select_wallet} allowedCurrencyCodes={getPrivateKeySweepableCurrencies()} showCreateWallet />
+      <WalletListModal
+        bridge={bridge}
+        headerTitle={s.strings.select_wallet}
+        allowedCurrencyCodes={getCurrenciesSelectedInfo('isPrivateKeySweepable')}
+        showCreateWallet
+      />
     )).then(({ walletId, currencyCode }: WalletListResult) => {
       if (walletId && currencyCode) {
         onSelectWallet(walletId, currencyCode)
