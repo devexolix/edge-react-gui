@@ -139,18 +139,6 @@ const merchantPartners = [
     recordID: ''
   },
   {
-    givenName: 'Totle',
-    hasThumbnail: true,
-    thumbnailPath: 'https://developer.edge.app/content/totle-logo.png',
-    emailAddresses: [],
-    postalAddresses: [],
-    middleName: '',
-    company: '',
-    jobTitle: '',
-    familyName: '',
-    recordID: ''
-  },
-  {
     givenName: 'Switchain',
     hasThumbnail: true,
     thumbnailPath: 'https://developer.edge.app/content/switchain.png',
