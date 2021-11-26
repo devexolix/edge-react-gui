@@ -6,7 +6,6 @@ import Share from 'react-native-share'
 import { sprintf } from 'sprintf-js'
 
 import { logoutRequest } from '../../../../../actions/LoginActions.js'
-import { loginQrCodeScanned, qrCodeScanned } from '../../../../../actions/ScanActions'
 import { selectWalletFromModal } from '../../../../../actions/WalletActions.js'
 import buysellIcon from '../../../../../assets/images/sidenav/buysell.png'
 import exchangeIcon from '../../../../../assets/images/sidenav/exchange.png'
@@ -22,9 +21,9 @@ import sweepIcon from '../../../../../assets/images/sidenav/sweep.png'
 import termsIcon from '../../../../../assets/images/sidenav/terms.png'
 import walletConnect from '../../../../../assets/images/sidenav/walletconnect-logo.png'
 import walletIcon from '../../../../../assets/images/sidenav/wallets.png'
-import { ScanModal } from '../../../../../components/modals/ScanModal.js'
 import { type WalletListResult, WalletListModal } from '../../../../../components/modals/WalletListModal.js'
-import { Airship, showError } from '../../../../../components/services/AirshipInstance.js'
+import { LOGIN_QR, SWEEP_PRIVATE_KEY } from '../../../../../components/scenes/ScanScene'
+import { Airship } from '../../../../../components/services/AirshipInstance.js'
 import {
   EXCHANGE_SCENE,
   FIO_ADDRESS_LIST,
@@ -32,8 +31,10 @@ import {
   PLUGIN_BUY,
   PLUGIN_SELL,
   REQUEST,
+  SCAN,
   SETTINGS_OVERVIEW_TAB,
   TERMS_OF_SERVICE,
+  WALLET_CONNECT,
   WALLET_LIST_SCENE
 } from '../../../../../constants/SceneKeys.js'
 import { getPrivateKeySweepableCurrencies } from '../../../../../constants/WalletAndCurrencyConstants.js'
@@ -51,8 +52,6 @@ type StateProps = {
   usersView: boolean
 }
 type DispatchProps = {
-  loginQrCodeScanned: (data: string) => void,
-  qrCodeScanned: (data: string) => void,
   logout: (username?: string) => void,
   onSelectWallet: (walletId: string, currencyCode: string) => void
 }
@@ -60,7 +59,7 @@ type Props = StateProps & DispatchProps
 
 class MainComponent extends React.Component<Props> {
   render() {
-    const { loginQrCodeScanned, qrCodeScanned, onSelectWallet, usersView } = this.props
+    const { onSelectWallet, usersView } = this.props
 
     return usersView ? (
       <UserList />
@@ -84,9 +83,9 @@ class MainComponent extends React.Component<Props> {
               <Separator />
               <WalletsButton />
               <Separator />
-              <ScanButton loginQrCodeScanned={loginQrCodeScanned} />
+              <ScanButton />
               <Separator />
-              <SweepPrivateKeyButton onSelectWallet={onSelectWallet} qrCodeScanned={qrCodeScanned} />
+              <SweepPrivateKeyButton onSelectWallet={onSelectWallet} />
               <Separator />
               <RequestButton />
               <Separator />
@@ -187,22 +186,13 @@ const WalletsButton = () => {
   )
 }
 
-const ScanButton = ({ loginQrCodeScanned }: { loginQrCodeScanned: (data: string) => void }) => {
-  const edgeLogin = () => {
-    Actions.drawerClose()
-    Airship.show(bridge => <ScanModal bridge={bridge} title={s.strings.scan_qr_label} />)
-      .then((result: string | void) => {
-        if (result) {
-          loginQrCodeScanned(result)
-        }
-      })
-      .catch(error => {
-        showError(error)
-      })
-  }
-
+const popToSendScan = () =>
+  goToScene(SCAN, {
+    data: LOGIN_QR
+  })
+const ScanButton = () => {
   return (
-    <Button onPress={edgeLogin}>
+    <Button onPress={popToSendScan}>
       <Button.Row>
         <Button.Left>
           <Image source={scanIcon} style={styles.iconImage} />
@@ -219,31 +209,20 @@ const ScanButton = ({ loginQrCodeScanned }: { loginQrCodeScanned: (data: string)
 }
 
 type SweepPrivateKeyButtonProps = {
-  qrCodeScanned: (data: string) => void,
   onSelectWallet: (walletId: string, currencyCode: string) => void
 }
 
 const SweepPrivateKeyButton = (props: SweepPrivateKeyButtonProps) => {
-  const { onSelectWallet, qrCodeScanned } = props
-  const sweepPrivateKey = () => {
-    Airship.show(bridge => <ScanModal bridge={bridge} title={s.strings.scan_qr_label} isTextInput />)
-      .then((result: string | void) => {
-        if (result) {
-          qrCodeScanned(result)
-        }
-      })
-      .catch(error => {
-        showError(error)
-      })
-  }
+  const { onSelectWallet } = props
   const handlePress = () => {
-    Actions.drawerClose()
     Airship.show(bridge => (
       <WalletListModal bridge={bridge} headerTitle={s.strings.select_wallet} allowedCurrencyCodes={getPrivateKeySweepableCurrencies()} showCreateWallet />
     )).then(({ walletId, currencyCode }: WalletListResult) => {
       if (walletId && currencyCode) {
         onSelectWallet(walletId, currencyCode)
-        sweepPrivateKey()
+        Actions.jump(SCAN, {
+          data: SWEEP_PRIVATE_KEY
+        })
       }
     })
   }
@@ -303,7 +282,7 @@ const ExchangeButton = () => {
   )
 }
 
-const popToWalletConnect = () => goToScene('wcConnections')
+const popToWalletConnect = () => goToScene(WALLET_CONNECT)
 const WalletConnectButton = () => {
   return (
     <Button onPress={popToWalletConnect}>
@@ -455,12 +434,6 @@ export const Main = connect<StateProps, DispatchProps, {}>(
     usersView: state.ui.scenes.controlPanel.usersView
   }),
   dispatch => ({
-    qrCodeScanned(data: string) {
-      dispatch(qrCodeScanned(data))
-    },
-    loginQrCodeScanned(data: string) {
-      dispatch(loginQrCodeScanned(data))
-    },
     logout(username?: string) {
       dispatch(logoutRequest(username))
     },
