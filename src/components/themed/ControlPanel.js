@@ -191,39 +191,39 @@ export function ControlPanel(props: Props) {
   const rowDatas: any[] = [
     {
       pressHandler: () => handleGoToScene(FIO_ADDRESS_LIST),
-      iconName: 'fio-names',
+      iconName: 'cp-fio-names',
       title: s.strings.drawer_fio_names
     },
     {
       pressHandler: () => handleGoToScene(FIO_REQUEST_LIST),
-      iconName: 'FIO-geometric',
+      iconName: 'cp-fio',
       title: s.strings.drawer_fio_requests
     },
     {
       pressHandler: () => handleGoToScene(WALLET_CONNECT),
-      iconName: 'wallet-connect',
+      iconName: 'cp-wallet-connect',
       title: s.strings.wc_walletconnect_title
     },
     {
       pressHandler: () => handleLoginQr(),
-      iconName: 'scan-qr',
+      iconName: 'cp-scan-qr',
       title: s.strings.drawer_scan_qr_send
     },
-    { pressHandler: handleSweep, iconName: 'sweep', title: s.strings.drawer_sweep_private_key },
+    { pressHandler: handleSweep, iconName: 'cp-sweep', title: s.strings.drawer_sweep_private_key },
     {
       pressHandler: () => handleGoToScene(TERMS_OF_SERVICE),
-      iconName: 'tos',
+      iconName: 'cp-tos',
       title: s.strings.title_terms_of_service
     },
-    { pressHandler: handleShareApp, iconName: 'share', title: s.strings.string_share + ' ' + s.strings.app_name },
+    { pressHandler: handleShareApp, iconName: 'cp-share', title: s.strings.string_share + ' ' + s.strings.app_name },
     {
       pressHandler: () => handleGoToScene(SETTINGS_OVERVIEW_TAB),
-      iconName: 'settings',
+      iconName: 'cp-settings',
       title: s.strings.settings_title
     },
     {
       pressHandler: () => dispatch(logoutRequest()),
-      iconName: 'logout',
+      iconName: 'cp-logout',
       title: s.strings.settings_button_logout
     }
   ]
@@ -263,7 +263,7 @@ export function ControlPanel(props: Props) {
         </View>
         <Pressable onPress={handleToggleDropdown} style={styles.rowContainer}>
           <View style={styles.rowIconContainer}>
-            <Fontello name="account" style={styles.icon} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
+            <Fontello name="cp-account" style={styles.icon} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
           </View>
           <View style={styles.rowBodyContainer}>
             <EdgeText style={styles.text}>{activeUsername}</EdgeText>
