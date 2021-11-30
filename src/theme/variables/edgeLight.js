@@ -88,7 +88,6 @@ export const edgeLight: Theme = {
   iconLoadingOverlay: palette.whiteOp75,
   transactionListIconBackground: palette.white,
   buySellCustomPluginModalIcon: palette.white,
-  controlPanelIcon: palette.edgeMint,
 
   // Background
   backgroundGradientLeft: palette.lightestGray,

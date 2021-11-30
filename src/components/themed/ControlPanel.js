@@ -238,7 +238,7 @@ export function ControlPanel(props: Props) {
         cryptoCurrencyCode={selectedCurrencyCode}
         isoFiatCurrencyCode={isoFiatCurrencyCode}
         autoPrecision
-        fiatSymbolSpace
+        appendFiatCurrencyCode
       />
     )
 
@@ -263,22 +263,22 @@ export function ControlPanel(props: Props) {
         </View>
         <Pressable onPress={handleToggleDropdown} style={styles.rowContainer}>
           <View style={styles.rowIconContainer}>
-            <Fontello name="cp-account" style={styles.icon} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
+            <Fontello name="cp-account" style={styles.icon} size={theme.rem(1.5)} color={theme.iconTappable} />
           </View>
           <View style={styles.rowBodyContainer}>
             <EdgeText style={styles.text}>{activeUsername}</EdgeText>
           </View>
           <View style={styles.rowIconContainer}>
             <Animated.View style={aRotate}>
-              <Feather name="chevron-down" color={theme.controlPanelIcon} size={theme.rem(1.5)} />
+              <Feather name="chevron-down" color={theme.iconTappable} size={theme.rem(1.5)} />
             </Animated.View>
           </View>
         </Pressable>
         {dividerLine}
       </View>
       {/* ==== Top Panel End ==== */}
-      {/* ==== Middle Panel Start ==== */}
-      <View style={styles.middlePanel}>
+      {/* ==== Bottom Panel Start ==== */}
+      <View style={styles.bottomPanel}>
         {/* === Dropdown Start === */}
         <Animated.View style={[styles.dropContainer, aDropdown]}>
           <ScrollView>
@@ -289,7 +289,7 @@ export function ControlPanel(props: Props) {
                   <EdgeText style={styles.text}>{username}</EdgeText>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.rowIconContainer} onPress={handleDeleteAccount(username)}>
-                  <MaterialIcon size={theme.rem(1.5)} name="close" color={theme.controlPanelIcon} />
+                  <MaterialIcon size={theme.rem(1.5)} name="close" color={theme.iconTappable} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -304,7 +304,7 @@ export function ControlPanel(props: Props) {
             {rowDatas.map(rowData => (
               <TouchableOpacity onPress={rowData.pressHandler} key={rowData.title} style={styles.rowContainer}>
                 <View style={styles.rowIconContainer}>
-                  <Fontello name={rowData.iconName} style={styles.icon} size={theme.rem(1.5)} color={theme.controlPanelIcon} />
+                  <Fontello name={rowData.iconName} style={styles.icon} size={theme.rem(1.5)} color={theme.iconTappable} />
                 </View>
                 <View style={styles.rowBodyContainer}>
                   <EdgeText style={styles.text}>{rowData.title}</EdgeText>
@@ -315,8 +315,7 @@ export function ControlPanel(props: Props) {
           {/* === Navigation Rows End === */}
         </View>
       </View>
-      {/* ==== Middle Panel End ==== */}
-      <View style={styles.bottomPanel}>{dividerLine}</View>
+      {/* ==== Bottom Panel End ==== */}
     </SceneWrapper>
   )
 }
@@ -356,23 +355,18 @@ const getStyles = cacheStyles((theme: Theme) => ({
     borderTopLeftRadius: theme.rem(2),
     height: theme.rem(10.5)
   },
-  middlePanel: {
+  bottomPanel: {
     flex: 1,
     flexGrow: 1,
-    backgroundColor: theme.modal
-  },
-  bottomPanel: {
     backgroundColor: theme.modal,
-    display: 'flex',
-    justifyContent: 'flex-end',
-    flexDirection: 'column',
-    height: theme.rem(4),
     borderBottomLeftRadius: theme.rem(2)
   },
   rowsContainer: {
-    position: 'absolute',
-    display: 'flex',
-    alignItems: 'flex-start'
+    flex: 1,
+    flexGrow: 1,
+    marginBottom: theme.rem(1.5),
+    borderColor: 'white',
+    borderWidth: 1
   },
   rowContainer: {
     display: 'flex',

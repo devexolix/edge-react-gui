@@ -838,7 +838,7 @@ export function formatFiatString(props: {
   isoFiatCurrencyCode: string,
   fiatAmount: string | number,
   minPrecision?: string | number,
-  appendCurrencyCode?: boolean,
+  appendFiatCurrencyCode?: boolean,
   autoPrecision?: boolean,
   fiatSymbolSpace?: boolean,
   parenthesisEnclosed?: boolean
@@ -847,13 +847,12 @@ export function formatFiatString(props: {
     isoFiatCurrencyCode,
     fiatAmount,
     minPrecision = 2,
-    appendCurrencyCode = false,
+    appendFiatCurrencyCode = false,
     autoPrecision = false,
     fiatSymbolSpace = false,
     parenthesisEnclosed = false
   } = props
-
-  const fiatCurrencyCode = appendCurrencyCode ? ` ${isoFiatCurrencyCode.replace('iso:', '')}` : ''
+  const fiatCurrencyCode = appendFiatCurrencyCode ? ` ${isoFiatCurrencyCode.replace('iso:', '')}` : ''
   const fiatSymbol = getFiatSymbol(isoFiatCurrencyCode)
   const fiatSymbolFmt = fiatSymbolSpace ? `${fiatSymbol} ` : fiatSymbol
   const openParen = parenthesisEnclosed ? '(' : ''
@@ -868,7 +867,6 @@ export function formatFiatString(props: {
       precision++
     }
   }
-
   const fiatAmountFmtStr = displayFiatAmount(parseFloat(fiatAmtCleanedDelim), precision)
 
   return `${openParen}${fiatSymbolFmt}${fiatAmountFmtStr}${fiatCurrencyCode}${closeParen}`

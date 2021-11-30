@@ -19,6 +19,8 @@ type Props = {
 export const FiatText = (props: Props) => {
   const { appendFiatCurrencyCode, nativeCryptoAmount, fiatSymbolSpace, parenthesisEnclosed, cryptoCurrencyCode, isoFiatCurrencyCode, autoPrecision } = props
 
+  console.log('====================FiatText.js:22========================\nappendFiatCurrencyCode: ', appendFiatCurrencyCode)
+
   // Convert native to fiat amount.
   // Does NOT take into account display denomination settings here,
   // i.e. sats, bits, etc.
